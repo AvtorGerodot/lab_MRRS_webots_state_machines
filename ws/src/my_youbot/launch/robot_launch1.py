@@ -90,13 +90,13 @@ def generate_launch_description():
         }]
     )
 
-    camera_node= Node(
-        package='my_youbot',
-        executable='camera_node',
-        parameters=[{
-                    'use_sim_time' : True,
-        }]
-    )
+    # camera_node= Node(
+    #     package='my_youbot',
+    #     executable='camera_node',
+    #     parameters=[{
+    #                 'use_sim_time' : True,
+    #     }]
+    # )
 
 #    get_xyz= Node(
 #        package='my_youbot',
@@ -115,8 +115,8 @@ def generate_launch_description():
         control_motor_2,
         
         smach,
-        camera_node,
-#        get_xyz,
+        # camera_node,
+        # get_xyz,
         launch.actions.RegisterEventHandler(
             event_handler=launch.event_handlers.OnProcessExit(
                 target_action=webots,
