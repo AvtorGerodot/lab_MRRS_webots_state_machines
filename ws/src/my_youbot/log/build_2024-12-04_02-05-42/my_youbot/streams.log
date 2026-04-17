@@ -1,0 +1,26 @@
+[1.901s] Invoking command in '/home/vadim/ros2_ws/src/my_youbot': PYTHONPATH=/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/my_youbot build --build-base /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build install --record /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/install.log --single-version-externally-managed install_data
+[2.413s] running egg_info
+[2.433s] writing build/my_youbot/my_youbot.egg-info/PKG-INFO
+[2.433s] writing dependency_links to build/my_youbot/my_youbot.egg-info/dependency_links.txt
+[2.433s] writing entry points to build/my_youbot/my_youbot.egg-info/entry_points.txt
+[2.434s] writing requirements to build/my_youbot/my_youbot.egg-info/requires.txt
+[2.434s] writing top-level names to build/my_youbot/my_youbot.egg-info/top_level.txt
+[2.434s] reading manifest file 'build/my_youbot/my_youbot.egg-info/SOURCES.txt'
+[2.434s] adding license file 'LICENSE'
+[2.434s] writing manifest file 'build/my_youbot/my_youbot.egg-info/SOURCES.txt'
+[2.434s] running build
+[2.434s] running build_py
+[2.434s] copying my_youbot/manipulator_driver.py -> /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build/lib/my_youbot
+[2.434s] running install
+[2.440s] running install_lib
+[2.450s] copying /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build/lib/my_youbot/manipulator_driver.py -> /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot
+[2.470s] byte-compiling /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot/manipulator_driver.py to manipulator_driver.cpython-310.pyc
+[2.470s] running install_data
+[2.470s] running install_egg_info
+[2.470s] removing '/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot-0.0.0-py3.10.egg-info' (and everything under it)
+[2.470s] Copying build/my_youbot/my_youbot.egg-info to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot-0.0.0-py3.10.egg-info
+[2.470s] running install_scripts
+[2.513s] Installing manipulator_driver script to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/my_youbot
+[2.520s] Installing my_robot_driver script to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/my_youbot
+[2.530s] writing list of installed files to '/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/install.log'
+[2.603s] Invoked command in '/home/vadim/ros2_ws/src/my_youbot' returned '0': PYTHONPATH=/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/my_youbot build --build-base /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build install --record /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/install.log --single-version-externally-managed install_data

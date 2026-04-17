@@ -1,0 +1,102 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/CircleArena.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/kuka/youbot/protos/Youbot.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation 0.12291723862038131 0.25601153350688355 -0.9588271205808656 0.9284801017752201
+  position -3.084387848113476 3.5356999882341036 1.0776435674264269
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+CircleArena {
+  radius 2
+}
+Solid {
+  translation 0.5397028817583631 0.18879676036311435 0.024950866176212283
+  rotation -3.783032257633923e-06 2.074282812363153e-06 0.9999999999906931 0.27348895638827614
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.05 0.05 0.05
+      }
+    }
+  ]
+  boundingObject Box {
+    size 0.05 0.05 0.05
+  }
+  physics Physics {
+    density 1
+  }
+  recognitionColors [
+    1 0 0
+  ]
+}
+Solid {
+  translation 0.757482 -0.60722 0.04
+  rotation 0 0 1 -1.047195307179586
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.1 0.15 0.08
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject Box {
+    size 0.1 0.15 0.08
+  }
+  physics Physics {
+  }
+  recognitionColors [
+    1 0 0
+  ]
+}
+Youbot {
+  translation -0.98949 -2.47677e-05 0.101938
+  rotation -0.019387119536159087 0.9995931135339636 0.020922403580056342 0.004238503502697004
+  name "my_robot"
+  controller "<extern>"
+  bodySlot [
+    DistanceSensor {
+      translation 0.27 -0.1 0
+      name "ds1"
+      lookupTable [
+        0 0 0
+        0.5 0.5 0
+      ]
+      numberOfRays 5
+      aperture 0.785
+    }
+    DistanceSensor {
+      translation 0.27 0 -0.05
+      rotation 1 0 0 0.7853979999999999
+      name "ds0"
+      lookupTable [
+        0 0 0
+        0.7 0.7 0
+      ]
+      numberOfRays 5
+      aperture 0.4
+    }
+    Camera {
+      translation 0.26 0 -0.05
+      width 320
+      height 320
+    }
+  ]
+}

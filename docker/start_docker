@@ -1,0 +1,25 @@
+#!/bin/bash
+PROJECT_NAME=$(basename "$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)")
+docker run -itd --net=host --rm \
+    -p 11311:11311 \
+    -e DISPLAY \
+    -e VGL_DISPLAY \
+    -e ROS_MASTER_URI=http://localhost:11311 \
+    -e HUD=$(id -u) \
+    -e HGD=$(id -g) \
+    -e HUNAME=$USER \
+    -v $PWD:/home/$USER/local/workspace \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    --privileged \
+    --device /dev/dri:/dev/dri \
+    -v /dev/bus/usb:/dev/bus/usb \
+    -v /dev/v4l:/dev/v4l \
+    -v /home/$USER/.Xauthority:/home/$USER/.Xauthority \
+    -v /home/$USER/.gazebo:/home/$USER/.gazebo \
+    -v /home/$USER/.ros:/home/$USER/.ros \
+    -v /home/$USER:/host \
+    --name "${PROJECT_NAME}-image" \
+    "${PROJECT_NAME}-image"
+
+CMD=/home/$USER/local/workspace/docker/create_user
+docker exec -t -u root "${PROJECT_NAME}-image" bash -ci $CMD

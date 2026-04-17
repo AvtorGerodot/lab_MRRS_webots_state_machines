@@ -1,0 +1,4 @@
+/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot/my_robot_driver.py:168: SyntaxWarning: "is" with a literal. Did you mean "=="?
+  while self.__end_effector is "":
+/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot/my_robot_driver.py:168: SyntaxWarning: "is" with a literal. Did you mean "=="?
+  while self.__end_effector is "":

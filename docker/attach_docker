@@ -1,0 +1,3 @@
+#!/bin/bash
+PROJECT_NAME=$(basename "$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)")
+docker exec -it -u $(id -u) "${PROJECT_NAME}-image" bash

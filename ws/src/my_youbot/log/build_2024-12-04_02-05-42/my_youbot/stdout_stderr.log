@@ -1,0 +1,24 @@
+running egg_info
+writing build/my_youbot/my_youbot.egg-info/PKG-INFO
+writing dependency_links to build/my_youbot/my_youbot.egg-info/dependency_links.txt
+writing entry points to build/my_youbot/my_youbot.egg-info/entry_points.txt
+writing requirements to build/my_youbot/my_youbot.egg-info/requires.txt
+writing top-level names to build/my_youbot/my_youbot.egg-info/top_level.txt
+reading manifest file 'build/my_youbot/my_youbot.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'build/my_youbot/my_youbot.egg-info/SOURCES.txt'
+running build
+running build_py
+copying my_youbot/manipulator_driver.py -> /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build/lib/my_youbot
+running install
+running install_lib
+copying /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build/lib/my_youbot/manipulator_driver.py -> /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot
+byte-compiling /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot/manipulator_driver.py to manipulator_driver.cpython-310.pyc
+running install_data
+running install_egg_info
+removing '/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot-0.0.0-py3.10.egg-info' (and everything under it)
+Copying build/my_youbot/my_youbot.egg-info to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot-0.0.0-py3.10.egg-info
+running install_scripts
+Installing manipulator_driver script to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/my_youbot
+Installing my_robot_driver script to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/my_youbot
+writing list of installed files to '/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/install.log'

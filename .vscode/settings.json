@@ -1,0 +1,18 @@
+{
+    "cmake.sourceDirectory": "/home/krysa/ros2-humble-webots/ws/src/rf2o_laser_odometry",
+
+    "python.autoComplete.extraPaths": [
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/workspaces/ros2-humble-webots-slam/ws/install/my_youbot/lib/python3.10/site-packages",
+        "/workspaces/ros2-humble-webots-slam/ws/install/lidars_localization/lib/python3.10/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/workspaces/ros2-humble-webots-slam/ws/install/my_youbot/lib/python3.10/site-packages",
+        "/workspaces/ros2-humble-webots-slam/ws/install/lidars_localization/lib/python3.10/site-packages"
+    ],
+    "python.linting.pylintArgs": [
+        "--init-hook",
+        "import sys; sys.path.append('/opt/ros/humble/lib/python3.10/site-packages')"
+    ]
+}

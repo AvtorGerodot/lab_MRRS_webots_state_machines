@@ -1,0 +1,31 @@
+[0.616s] Invoking command in '/home/vadim/ros2_ws/src/my_youbot': PYTHONPATH=/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/my_youbot build --build-base /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build install --record /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/install.log --single-version-externally-managed install_data
+[0.881s] running egg_info
+[0.882s] writing build/my_youbot/my_youbot.egg-info/PKG-INFO
+[0.882s] writing dependency_links to build/my_youbot/my_youbot.egg-info/dependency_links.txt
+[0.882s] writing entry points to build/my_youbot/my_youbot.egg-info/entry_points.txt
+[0.882s] writing requirements to build/my_youbot/my_youbot.egg-info/requires.txt
+[0.883s] writing top-level names to build/my_youbot/my_youbot.egg-info/top_level.txt
+[0.885s] reading manifest file 'build/my_youbot/my_youbot.egg-info/SOURCES.txt'
+[0.885s] adding license file 'LICENSE'
+[0.885s] writing manifest file 'build/my_youbot/my_youbot.egg-info/SOURCES.txt'
+[0.886s] running build
+[0.886s] running build_py
+[0.886s] copying my_youbot/camera_node.py -> /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build/lib/my_youbot
+[0.886s] copying my_youbot/obstacle_smach.py -> /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build/lib/my_youbot
+[0.886s] running install
+[0.887s] running install_lib
+[0.887s] copying /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build/lib/my_youbot/camera_node.py -> /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot
+[0.888s] copying /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build/lib/my_youbot/obstacle_smach.py -> /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot
+[0.888s] byte-compiling /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot/camera_node.py to camera_node.cpython-310.pyc
+[0.890s] byte-compiling /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot/obstacle_smach.py to obstacle_smach.cpython-310.pyc
+[0.893s] running install_data
+[0.893s] running install_egg_info
+[0.895s] removing '/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot-0.0.0-py3.10.egg-info' (and everything under it)
+[0.895s] Copying build/my_youbot/my_youbot.egg-info to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot-0.0.0-py3.10.egg-info
+[0.896s] running install_scripts
+[0.918s] Installing camera_node script to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/my_youbot
+[0.918s] Installing my_robot_driver script to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/my_youbot
+[0.918s] Installing obstacle_avoider script to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/my_youbot
+[0.919s] Installing obstacle_smach script to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/my_youbot
+[0.919s] writing list of installed files to '/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/install.log'
+[0.946s] Invoked command in '/home/vadim/ros2_ws/src/my_youbot' returned '0': PYTHONPATH=/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/my_youbot build --build-base /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build install --record /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/install.log --single-version-externally-managed install_data

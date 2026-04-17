@@ -1,0 +1,60 @@
+slam_toolbox:
+  ros__parameters:
+    base_frame: base_link # base_link
+    odom_frame: odom # odom
+    map_frame: map
+    laser_frame: laser_frame # lidar_frame  # Убедитесь, что это правильное имя фрейма!
+    scan_topic: /scan # /scan
+    mode: mapping
+    
+    use_sim_time: false
+
+
+    # use_odom: false  # 
+    use_scan_matching: true  # true
+    use_scan_barycenter: true
+    scan_buffer_size: 10
+
+    use_odom: true
+
+    # Map update parameters
+    resolution: 0.02
+    max_laser_range: 10.0
+    tf_buffer_duration: 60.0  # Увеличиваем с 60.0 до 120.0
+    transform_timeout: 0.2
+    
+    # SLAM parameters
+    # minimum_time_interval: 0.5
+    # update_timing: true
+    # enable_interactive_mode: false
+    
+    # TF parameters
+    # publish_frame_attached_to_scan: false # true
+    # publish_map_odom_transform: true # true
+    
+
+    # Lifecycle parameters
+    # use_lifecycle_manager: true
+    # bond_disable_heartbeat_timeout: false
+    
+    # Ceres Solver parameters
+    # ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    # ceres_preconditioner: SCHUR_JACOBI
+    # ceres_trust_strategy: LEVENBERG_MARQUARDT
+
+    map_update_interval: 0.2  # Еще более частое обновление
+    minimum_travel_distance: 0.002  # Меньшее расстояние для обновления
+    minimum_travel_heading: 0.002  # Меньший угол для обновления
+
+    # Параметры для использования одометрии
+    # odom_topic: /odom  # Указывает топик, откуда получать данные одометрии
+    
+    # Параметры для настройки веса одометрии и сканов в алгоритме
+    # matcher_linear_covariance: 100.0  # Большое значение = низкое доверие к данным сканирования
+    # matcher_angular_covariance: 100.0  # Большое значение = низкое доверие к данным сканирования
+    # loop_search_enabled: false
+    
+    # scan_matcher_profile: 1  # 0=fast, 1=default, 2=accurate
+    # Используйте covariance_scale для настройки доверия к одометрии
+    # covariance_scale: 0.0  # Коэффициент доверия к одометрии (от 0 до 1)
+    # loop_search_maximum_distance: 3.0  # Максимальное расстояние для поиска закрытия цикла

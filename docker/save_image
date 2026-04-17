@@ -1,0 +1,4 @@
+#!/bin/bash
+PROJECT_NAME=$(basename "$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)")
+docker save "${PROJECT_NAME}-image" -o "${PROJECT_NAME}-image.tar"
+echo "Image saved as ${PROJECT_NAME}-image.tar"

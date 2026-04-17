@@ -1,0 +1,14 @@
+#!/bin/bash
+groupadd -f video
+groupadd -f dialout
+
+echo "Creating user $HUNAME with UID $HUD..."
+useradd -u $HUD -G video,dialout $HUNAME
+
+groupadd -f $HUNAME -g $HGD
+usermod -aG sudo $HUNAME
+
+echo "source /home/$HUNAME/local/workspace/docker/.bashrc" >> /home/$HUNAME/.bashrc
+echo "$HUNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$HUNAME
+chown -R $HUNAME "/home/$HUNAME"
+echo "User configuration completed."

@@ -1,0 +1,152 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/kuka/youbot/protos/Youbot.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/devices/hokuyo/protos/HokuyoUtm30lx.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/apartment_structure/protos/Wall.proto"
+
+WorldInfo {
+  info [
+    "Simulation of the KUKA youBot robot."
+    "This model includes an accurate and fast simulation of the Meccanum wheels."
+    "The robot can be equiped with various sensors (including the Microsoft Kinect) and configured with zero, one or two arms."
+  ]
+  title "KUKA youBot"
+  basicTimeStep 16
+  contactProperties [
+    ContactProperties {
+      material1 "InteriorWheelMat"
+      coulombFriction [
+        0, 2, 0
+      ]
+      frictionRotation -0.785398 0
+      bounce 0
+      forceDependentSlip [
+        10, 0
+      ]
+    }
+    ContactProperties {
+      material1 "ExteriorWheelMat"
+      coulombFriction [
+        0, 2, 0
+      ]
+      frictionRotation 0.785398 0
+      bounce 0
+      forceDependentSlip [
+        10, 0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.3801458676595389 -0.19627307314114725 0.9038617151207955 4.062747785058678
+  position 5.41302741068989 7.358669274701169 7.617916464936566
+  follow "my_robot"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  size 100 100
+}
+Solid {
+  translation 1.95331 0.516931 0.025
+  rotation 0 0 1 -0.261795307179586
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.05 0.05 0.05
+      }
+    }
+  ]
+  boundingObject Box {
+    size 0.05 0.05 0.05
+  }
+  physics Physics {
+    density 100
+  }
+  recognitionColors [
+    1 0 0
+    0 0 0
+    0 0 0
+  ]
+}
+Solid {
+  translation 1.34291 -0.292696 0.04
+  rotation 0 0 1 -1.8325953071795862
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        metalness 0
+      }
+      geometry Box {
+        size 0.1 0.15 0.08
+      }
+    }
+  ]
+  name "solid(2)"
+  boundingObject Box {
+    size 0.1 0.15 0.08
+  }
+  physics Physics {
+    density 100
+  }
+  recognitionColors [
+    1 0 0
+    0 0 0
+    0 0 0
+  ]
+}
+Youbot {
+  translation 0.0012587336394923243 1.0053467937509069 0.10193777039495037
+  rotation 0.0007140402215585044 0.0031769455570918865 -0.999994698567692 0.493045882032707
+  name "my_robot"
+  controller "<extern>"
+  bodySlot [
+    HokuyoUtm30lx {
+      translation -0.24 1.3268e-07 0.09
+      rotation 0 0 1 3.14159
+      name "hokuyo_lidar"
+    }
+    DistanceSensor {
+      translation 0.27 0 -0.06
+      rotation 1 0 0 0.785398
+      name "ds0"
+      lookupTable [
+        0 0 0
+        0.7 0.7 0
+      ]
+      numberOfRays 5
+      aperture 0.4
+    }
+    Camera {
+      translation 0.26 0 -0.05
+      width 320
+      height 320
+    }
+  ]
+}
+Wall {
+  translation -1.4 0.5 0
+  size 0.1 5 1
+}
+Wall {
+  translation 1.7 -2 0
+  rotation 0 0 1 -1.5707953071795862
+  name "wall(1)"
+  size 0.1 5 1
+}
+Wall {
+  translation 2.83466 1.55468 0
+  rotation 0 0 1 -2.6179953071795863
+  name "wall(2)"
+  size 0.1 3 1
+}

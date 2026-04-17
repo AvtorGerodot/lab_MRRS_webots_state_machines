@@ -1,0 +1,133 @@
+[0.000000] (-) TimerEvent: {}
+[0.049210] (my_youbot) JobQueued: {'identifier': 'my_youbot', 'dependencies': OrderedDict()}
+[0.049287] (my_youbot) JobStarted: {'identifier': 'my_youbot'}
+[0.119196] (-) TimerEvent: {}
+[0.219492] (-) TimerEvent: {}
+[0.319770] (-) TimerEvent: {}
+[0.420026] (-) TimerEvent: {}
+[0.529266] (-) TimerEvent: {}
+[0.629552] (-) TimerEvent: {}
+[0.729812] (-) TimerEvent: {}
+[0.830074] (-) TimerEvent: {}
+[0.939385] (-) TimerEvent: {}
+[1.039719] (-) TimerEvent: {}
+[1.140036] (-) TimerEvent: {}
+[1.249330] (-) TimerEvent: {}
+[1.349593] (-) TimerEvent: {}
+[1.449899] (-) TimerEvent: {}
+[1.550182] (-) TimerEvent: {}
+[1.659400] (-) TimerEvent: {}
+[1.759735] (-) TimerEvent: {}
+[1.860018] (-) TimerEvent: {}
+[1.969275] (-) TimerEvent: {}
+[2.069578] (-) TimerEvent: {}
+[2.169905] (-) TimerEvent: {}
+[2.279184] (-) TimerEvent: {}
+[2.379521] (-) TimerEvent: {}
+[2.479829] (-) TimerEvent: {}
+[2.580143] (-) TimerEvent: {}
+[2.689365] (-) TimerEvent: {}
+[2.789731] (-) TimerEvent: {}
+[2.890056] (-) TimerEvent: {}
+[2.999390] (-) TimerEvent: {}
+[3.099798] (-) TimerEvent: {}
+[3.209236] (-) TimerEvent: {}
+[3.309552] (-) TimerEvent: {}
+[3.409864] (-) TimerEvent: {}
+[3.510136] (-) TimerEvent: {}
+[3.619665] (-) TimerEvent: {}
+[3.719999] (-) TimerEvent: {}
+[3.829253] (-) TimerEvent: {}
+[3.929547] (-) TimerEvent: {}
+[4.029848] (-) TimerEvent: {}
+[4.130149] (-) TimerEvent: {}
+[4.239423] (-) TimerEvent: {}
+[4.339755] (-) TimerEvent: {}
+[4.440145] (-) TimerEvent: {}
+[4.549405] (-) TimerEvent: {}
+[4.649667] (-) TimerEvent: {}
+[4.750032] (-) TimerEvent: {}
+[4.859264] (-) TimerEvent: {}
+[4.959547] (-) TimerEvent: {}
+[5.059842] (-) TimerEvent: {}
+[5.160167] (-) TimerEvent: {}
+[5.269498] (-) TimerEvent: {}
+[5.369840] (-) TimerEvent: {}
+[5.470187] (-) TimerEvent: {}
+[5.579414] (-) TimerEvent: {}
+[5.679683] (-) TimerEvent: {}
+[5.779988] (-) TimerEvent: {}
+[5.889282] (-) TimerEvent: {}
+[5.989627] (-) TimerEvent: {}
+[6.089907] (-) TimerEvent: {}
+[6.199157] (-) TimerEvent: {}
+[6.299488] (-) TimerEvent: {}
+[6.399790] (-) TimerEvent: {}
+[6.500050] (-) TimerEvent: {}
+[6.609300] (-) TimerEvent: {}
+[6.709586] (-) TimerEvent: {}
+[6.809934] (-) TimerEvent: {}
+[6.919201] (-) TimerEvent: {}
+[7.019577] (-) TimerEvent: {}
+[7.119914] (-) TimerEvent: {}
+[7.289156] (my_youbot) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', 'build/my_youbot', 'build', '--build-base', '/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build', 'install', '--record', '/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/vadim/ros2_ws/src/my_youbot', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'vadim', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/vadim/ros2_ws/install/webots_ros2_control/lib:/home/vadim/ros2_ws/install/webots_ros2_driver/lib:/home/vadim/ros2_ws/install/webots_ros2_msgs/lib:/home/vadim/ros2_ws/install/smach_msgs/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib', 'HOME': '/home/vadim', 'OLDPWD': '/home/vadim/ros2_ws/src/my_youbot/my_youbot', 'ROS_PYTHON_VERSION': '3', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'WSL_DISTRO_NAME': 'Ubuntu', 'WAYLAND_DISPLAY': 'wayland-0', 'COLCON_PREFIX_PATH': '/home/vadim/ros2_ws/src/my_youbot/install:/home/vadim/ros2_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'vadim', 'NAME': 'DESKTOP-2VV7HMR', 'WSL_INTEROP': '/run/WSL/8443_interop', 'PULSE_SERVER': 'unix:/mnt/wslg/PulseServer', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm-256color', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/home/vadim/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/WindowsApps/CanonicalGroupLimited.Ubuntu_2404.1.66.0_x64__79rhkp1fndgsc:/mnt/c/RoboDK/Python37/Scripts/:/mnt/c/RoboDK/Python37/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/MATLAB/R2023b/runtime/win64:/mnt/c/Program Files/MATLAB/R2023b/bin:/mnt/c/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/:/mnt/c/Program Files (x86)/Microsoft SQL Server/150/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/150/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/150/DTS/Binn/:/mnt/c/Program Files (x86)/Windows Kits/8.1/Windows Performance Toolkit/:/mnt/c/Users/movtv/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/movtv/AppData/Local/Programs/Microsoft VS Code/bin:/snap/bin', 'XDG_RUNTIME_DIR': '/run/user/1000/', 'DISPLAY': ':0', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/vadim/ros2_ws/src/my_youbot/install/my_youbot:/home/vadim/ros2_ws/install/webots_ros2:/home/vadim/ros2_ws/install/webots_ros2_universal_robot:/home/vadim/ros2_ws/install/webots_ros2_turtlebot:/home/vadim/ros2_ws/install/webots_ros2_tiago:/home/vadim/ros2_ws/install/webots_ros2_tests:/home/vadim/ros2_ws/install/webots_ros2_tesla:/home/vadim/ros2_ws/install/webots_ros2_mavic:/home/vadim/ros2_ws/install/webots_ros2_epuck:/home/vadim/ros2_ws/install/webots_ros2_control:/home/vadim/ros2_ws/install/webots_ros2_driver:/home/vadim/ros2_ws/install/webots_ros2_msgs:/home/vadim/ros2_ws/install/webots_ros2_importer:/home/vadim/ros2_ws/install/executive_smach:/home/vadim/ros2_ws/install/smach_ros:/home/vadim/ros2_ws/install/smach_msgs:/home/vadim/ros2_ws/install/smach:/opt/ros/humble', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PWD': '/home/vadim/ros2_ws/src/my_youbot/build/my_youbot', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages:/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/webots_ros2/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/webots_ros2_universal_robot/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/webots_ros2_turtlebot/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/webots_ros2_tiago/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/webots_ros2_tests/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/webots_ros2_tesla/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/webots_ros2_mavic/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/webots_ros2_epuck/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/webots_ros2_driver/local/lib/python3.10/dist-packages:/home/vadim/ros2_ws/install/webots_ros2_msgs/local/lib/python3.10/dist-packages:/home/vadim/ros2_ws/install/webots_ros2_importer/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/smach_ros/lib/python3.10/site-packages:/home/vadim/ros2_ws/install/smach_msgs/local/lib/python3.10/dist-packages:/home/vadim/ros2_ws/install/smach/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1', 'WSL2_GUI_APPS_ENABLED': '1', 'HOSTTYPE': 'x86_64', 'CMAKE_PREFIX_PATH': '/home/vadim/ros2_ws/install/webots_ros2_control:/home/vadim/ros2_ws/install/webots_ros2_driver:/home/vadim/ros2_ws/install/webots_ros2_msgs:/home/vadim/ros2_ws/install/executive_smach:/home/vadim/ros2_ws/install/smach_msgs', 'WSLENV': ''}, 'shell': False}
+[7.290000] (-) TimerEvent: {}
+[7.399240] (-) TimerEvent: {}
+[7.499593] (-) TimerEvent: {}
+[7.599852] (-) TimerEvent: {}
+[7.700128] (-) TimerEvent: {}
+[7.809413] (-) TimerEvent: {}
+[7.909678] (-) TimerEvent: {}
+[8.010001] (-) TimerEvent: {}
+[8.119213] (-) TimerEvent: {}
+[8.219517] (-) TimerEvent: {}
+[8.319799] (-) TimerEvent: {}
+[8.420102] (-) TimerEvent: {}
+[8.529319] (-) TimerEvent: {}
+[8.629601] (-) TimerEvent: {}
+[8.729902] (-) TimerEvent: {}
+[8.830165] (-) TimerEvent: {}
+[8.939389] (-) TimerEvent: {}
+[9.039659] (-) TimerEvent: {}
+[9.139994] (-) TimerEvent: {}
+[9.249311] (-) TimerEvent: {}
+[9.349647] (-) TimerEvent: {}
+[9.449997] (-) TimerEvent: {}
+[9.559232] (-) TimerEvent: {}
+[9.659523] (-) TimerEvent: {}
+[9.759800] (-) TimerEvent: {}
+[9.860088] (-) TimerEvent: {}
+[9.900063] (my_youbot) StdoutLine: {'line': b'running egg_info\n'}
+[9.939200] (my_youbot) StdoutLine: {'line': b'writing build/my_youbot/my_youbot.egg-info/PKG-INFO\n'}
+[9.959171] (my_youbot) StdoutLine: {'line': b'writing dependency_links to build/my_youbot/my_youbot.egg-info/dependency_links.txt\n'}
+[9.959334] (my_youbot) StdoutLine: {'line': b'writing entry points to build/my_youbot/my_youbot.egg-info/entry_points.txt\n'}
+[9.959392] (my_youbot) StdoutLine: {'line': b'writing requirements to build/my_youbot/my_youbot.egg-info/requires.txt\n'}
+[9.959442] (my_youbot) StdoutLine: {'line': b'writing top-level names to build/my_youbot/my_youbot.egg-info/top_level.txt\n'}
+[9.959490] (my_youbot) StdoutLine: {'line': b"reading manifest file 'build/my_youbot/my_youbot.egg-info/SOURCES.txt'\n"}
+[9.959537] (my_youbot) StdoutLine: {'line': b"adding license file 'LICENSE'\n"}
+[9.959584] (my_youbot) StdoutLine: {'line': b"writing manifest file 'build/my_youbot/my_youbot.egg-info/SOURCES.txt'\n"}
+[9.960094] (-) TimerEvent: {}
+[9.979197] (my_youbot) StdoutLine: {'line': b'running build\n'}
+[9.979352] (my_youbot) StdoutLine: {'line': b'running build_py\n'}
+[9.979436] (my_youbot) StdoutLine: {'line': b'copying my_youbot/my_robot_driver.py -> /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build/lib/my_youbot\n'}
+[9.979503] (my_youbot) StdoutLine: {'line': b'running install\n'}
+[9.979581] (my_youbot) StdoutLine: {'line': b'running install_lib\n'}
+[9.989301] (my_youbot) StdoutLine: {'line': b'copying /home/vadim/ros2_ws/src/my_youbot/build/my_youbot/build/lib/my_youbot/my_robot_driver.py -> /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot\n'}
+[9.989781] (my_youbot) StdoutLine: {'line': b'byte-compiling /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot/my_robot_driver.py to my_robot_driver.cpython-310.pyc\n'}
+[10.010120] (my_youbot) StdoutLine: {'line': b'running install_data\n'}
+[10.019438] (my_youbot) StdoutLine: {'line': b'running install_egg_info\n'}
+[10.039383] (my_youbot) StdoutLine: {'line': b"removing '/home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[10.039936] (my_youbot) StdoutLine: {'line': b'Copying build/my_youbot/my_youbot.egg-info to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/python3.10/site-packages/my_youbot-0.0.0-py3.10.egg-info\n'}
+[10.049819] (my_youbot) StdoutLine: {'line': b'running install_scripts\n'}
+[10.060167] (-) TimerEvent: {}
+[10.169485] (-) TimerEvent: {}
+[10.269745] (-) TimerEvent: {}
+[10.320022] (my_youbot) StdoutLine: {'line': b'Installing my_robot_driver script to /home/vadim/ros2_ws/src/my_youbot/install/my_youbot/lib/my_youbot\n'}
+[10.329503] (my_youbot) StdoutLine: {'line': b"writing list of installed files to '/home/vadim/ros2_ws/src/my_youbot/build/my_youbot/install.log'\n"}
+[10.369849] (-) TimerEvent: {}
+[10.479211] (-) TimerEvent: {}
+[10.579554] (-) TimerEvent: {}
+[10.789169] (my_youbot) CommandEnded: {'returncode': 0}
+[10.789516] (-) TimerEvent: {}
+[10.789673] (my_youbot) JobEnded: {'identifier': 'my_youbot', 'rc': 0}
+[10.790088] (-) EventReactorShutdown: {}

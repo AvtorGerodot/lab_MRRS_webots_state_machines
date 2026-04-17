@@ -1,0 +1,4 @@
+#!/bin/bash
+PROJECT_NAME=$(basename "$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)")
+docker pull fyodor/ros_noetic
+docker image tag fyodor/ros_noetic "${PROJECT_NAME}-image"
