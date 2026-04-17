@@ -72,6 +72,7 @@ def arm_ik(x, y, z, Q):
 
 class MyRobotDriver:
     def init(self, webots_node, properties):
+        
         self.__robot = webots_node.robot
 
 
@@ -109,8 +110,19 @@ class MyRobotDriver:
         self.__right_sensor_value_ = None
 
 
+
+        # Получаем имя робота из объекта webots_node
+        # (обычно webots_node.robot.getName() возвращает имя, например "my_robot_0")
+        robot_name = webots_node.robot.getName()
+        # Используем это имя как namespace
+        namespace = robot_name
+        
         rclpy.init(args=None)
-        self.__node = rclpy.create_node('my_robot_driver')
+        self.__node = rclpy.create_node('robot_driver', namespace = namespace)
+        # self.__node = rclpy.create_node('my_robot_driver')
+        self.__node.get_logger().info(f"MyRobotDriver started in namespace '{namespace}'")
+        
+        
         self.__node.create_subscription(Twist, 'cmd_vel', self.__cmd_vel_callback, 1)
 
         self.__node.create_subscription(String, 'end_effector', self.__end_effector_callback, 1)
@@ -122,6 +134,9 @@ class MyRobotDriver:
         self.__node.publisher_ = self.__node.create_publisher(Int32, 'feedback', 1)
         
         self.current_speed = None
+
+        self.__node.get_logger().info("MyRobotDriver: init completed successfully")
+
 
     def __cmd_vel_callback(self, twist):
         self.__target_twist = twist
@@ -139,6 +154,7 @@ class MyRobotDriver:
 
 
     def step(self):
+        
         rclpy.spin_once(self.__node, timeout_sec=0)
 
         forward_speed = self.__target_twist.linear.x
