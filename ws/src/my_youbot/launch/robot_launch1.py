@@ -9,10 +9,10 @@ from webots_ros2_driver.webots_controller import WebotsController
 
 def generate_launch_description():
     package_dir = get_package_share_directory('my_youbot')
-    robot_description_path = os.path.join(package_dir, 'resource', 'my_robot.urdf')
+    robot_description_path = os.path.join(package_dir, 'resource', 'my_robot_gps_imu.urdf')
 
     webots = WebotsLauncher(
-        world=os.path.join(package_dir, 'worlds', 'three_robots_world.wbt'), # my_world_new.wbt
+        world=os.path.join(package_dir, 'worlds', 'three_robots_world_GPS_IMU.wbt'), # my_world_new.wbt
         mode='realtime',
         ros2_supervisor=True
     )
@@ -35,10 +35,19 @@ def generate_launch_description():
             executable='control_motor',
             parameters=[{
                         'use_sim_time' : True,
-            }]
+            }],
         )
 
-        return [robot_driver, control_motor]
+        state_publisher = Node(
+            package = 'my_youbot',
+            namespace = webots_robot_name_and_namespace,
+            executable = 'robot_state_publisher',
+            parameters = [{
+                'use_sim_time': True,
+            }],
+        )
+
+        return [robot_driver, control_motor, state_publisher]
 
 
 

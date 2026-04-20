@@ -8,12 +8,10 @@ data_files.append(('share/' + package_name + '/launch', ['launch/robot_launch.py
 data_files.append(('share/' + package_name + '/launch', ['launch/robot_launch1.py']))
 
 data_files.append(('share/' + package_name + '/worlds', glob.glob('worlds/*.wbt')))
-# data_files.append(('share/' + package_name + '/worlds', ['worlds/my_world_old.wbt']))
-# data_files.append(('share/' + package_name + '/worlds', ['worlds/my_world_new.wbt']))
-# data_files.append(('share/' + package_name + '/worlds', ['worlds/three_robots_world.wbt']))
-# data_files.append(('share/' + package_name + '/worlds', ['worlds/three_robots_world2.wbt']))
 
-data_files.append(('share/' + package_name + '/resource', ['resource/my_robot.urdf']))
+# data_files.append(('share/' + package_name + '/resource', ['resource/my_robot.urdf']))e
+data_files.append(('share/' + package_name + '/resource', glob.glob('resource/*.urdf')))
+
 data_files.append(('share/' + package_name, ['package.xml']))
 data_files.append(('share/' + package_name + '/models', ['models/best3.pt']))
 setup(
@@ -34,7 +32,8 @@ setup(
             'control_motor = my_youbot.control_motor:main',
             'smach = my_youbot.smach:main',
             'camera_node= my_youbot.camera_node:main',
-#            'get_xyz= my_youbot.get_xyz:main',
+            'robot_state_publisher = my_youbot.robot_state_publisher:main',
+            # 'get_xyz= my_youbot.get_xyz:main',
         ],
     },
 )
