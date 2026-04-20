@@ -5,6 +5,10 @@ from std_msgs.msg import String, Float32, Int32
 from sensor_msgs.msg import Range
 import numpy as np
 
+
+
+LOGGER_ON = False       # включаем логирование при выполнении ноды
+
 HALF_DISTANCE_BETWEEN_WHEELS = 0.16
 WHEEL_RADIUS = 0.05
 
@@ -120,7 +124,8 @@ class MyRobotDriver:
         rclpy.init(args=None)
         self.__node = rclpy.create_node('robot_driver', namespace = namespace)
         # self.__node = rclpy.create_node('my_robot_driver')
-        self.__node.get_logger().info(f"MyRobotDriver started in namespace '{namespace}'")
+        if LOGGER_ON:
+            self.__node.get_logger().info(f"MyRobotDriver started in namespace '{namespace}'")
         
         
         self.__node.create_subscription(Twist, 'cmd_vel', self.__cmd_vel_callback, 1)
@@ -135,7 +140,8 @@ class MyRobotDriver:
         
         self.current_speed = None
 
-        self.__node.get_logger().info("MyRobotDriver: init completed successfully")
+        if LOGGER_ON:
+            self.__node.get_logger().info("MyRobotDriver: init completed successfully")
 
 
     def __cmd_vel_callback(self, twist):

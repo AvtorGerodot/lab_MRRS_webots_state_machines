@@ -105,3 +105,10 @@ RUN pip install "numpy<2.0" opencv-python pillow ultralytics
 
 RUN apt-get update && apt-get install -y ros-humble-smach ros-humble-executive-smach
 
+
+# Добавляем инициализацию ROS и переменные окружения в .bashrc
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
+    echo "export WEBOTS_HOME=/usr/local/webots" >> ~/.bashrc && \
+    echo "export ROS2_WEBOTS_HOME=/usr/local/webots" >> ~/.bashrc && \
+    echo "export USER=\$(whoami)" >> ~/.bashrc
+
