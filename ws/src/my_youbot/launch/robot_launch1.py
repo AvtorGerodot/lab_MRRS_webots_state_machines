@@ -12,7 +12,7 @@ def generate_launch_description():
     robot_description_path = os.path.join(package_dir, 'resource', 'my_robot_gps_imu.urdf')
 
     webots = WebotsLauncher(
-        world=os.path.join(package_dir, 'worlds', 'three_robots_world_GPS_IMU.wbt'), # my_world_new.wbt
+        world=os.path.join(package_dir, 'worlds', 'three_robots_world_GPS_IMU_wider_walls.wbt'), # my_world_new.wbt
         mode='realtime',
         ros2_supervisor=True
     )

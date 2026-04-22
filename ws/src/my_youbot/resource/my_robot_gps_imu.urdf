@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="My robot">
     <webots>
-    	<device reference="hukuyo_lidar" type="Lidar">
+    	<!-- <device reference="hukuyo_lidar" type="Lidar">
             <ros>
                 <topicName>lidar</topicName>
                 <alwaysOn>true</alwaysOn>
@@ -18,7 +18,7 @@
                 <topicName>right_sensor</topicName>
                 <alwaysOn>true</alwaysOn>
             </ros>
-        </device>
+        </device> -->
         <device reference="camera" type="Camera">
             <ros>
                 <topicName>camera</topicName>
