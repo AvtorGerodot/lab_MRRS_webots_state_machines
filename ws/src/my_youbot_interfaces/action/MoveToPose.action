@@ -1,0 +1,8 @@
+# Goal
+geometry_msgs/Pose2D target
+---
+# Result
+bool success
+---
+# Feedback
+geometry_msgs/Pose2D current_pose

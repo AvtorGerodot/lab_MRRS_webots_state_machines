@@ -1,283 +1,183 @@
 #!/usr/bin/env python3
-"""
-multi_robot_smach.py
-Реализация сети Петри (3 робота, 2 семафора) через иерархические
-SMACH-машины состояний и point-to-point контроллер (Pose2D goal).
-"""
-
-import threading
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Bool
-from geometry_msgs.msg import Pose2D
+from rclpy.action import ActionClient
 import smach
+import threading
+import time
 
-# ─────────────────────────────────────────────
-#  Глобальный ROS2-узел (один на весь процесс)
-# ─────────────────────────────────────────────
-class MultiRobotSmach(Node):
+from my_youbot_interfaces.action import MoveToPose
+
+class SemaphoreManager:
     def __init__(self):
-        super().__init__('multi_robot_smach')
-
-        # Семафоры (фишки) — по одной фишке на флаг
-        self.sem1 = threading.Semaphore(1)   # флаг готовности 1 (robot_0 + robot_1)
-        self.sem2 = threading.Semaphore(1)   # флаг готовности 2 (robot_1 + robot_2)
-
-        # Словарь: имя робота → имя флага
-        self.robot_semaphores = {
-            'my_robot_0': self.sem1,
-            'my_robot_1': self.sem1,   # youbot_2 делит оба флага —
-            'my_robot_2': self.sem2,   #   здесь упрощение: каждый робот
-        }                              #   использует свой «правый» флаг
-
-        # Публикаторы цели для каждого робота
-        # point_to_point_controller слушает /<robot_name>/goal_pose (Pose2D)
-        self.goal_pubs = {
-            name: self.create_publisher(Pose2D, f'/{name}/goal_pose', 1)
-            for name in ('my_robot_0', 'my_robot_1', 'my_robot_2')
+        self.locks = {
+            'corridor_0': threading.Lock(),
+            'corridor_2': threading.Lock()
         }
+    def acquire(self, corridor_name, timeout=None):
+        return self.locks[corridor_name].acquire(timeout=timeout)
+    def release(self, corridor_name):
+        if self.locks[corridor_name].locked():
+            self.locks[corridor_name].release()
+    def is_locked(self, corridor_name):
+        return self.locks[corridor_name].locked()
 
-        # Словарь: флаги «цель достигнута» (обновляются из коллбэков)
-        self.goal_reached = {name: False
-                             for name in ('my_robot_0', 'my_robot_1', 'my_robot_2')}
+BASE_ROUTE = [
+    ( 0.0,  2.5,  0.0   ),
+    ( 1.0,  2.5, -1.5708),
+    ( 1.0, -2.5, -1.5708),
+    ( 0.0, -2.5,  3.1415),
+    (-1.0, -2.5,  1.5708),
+    (-1.0,  2.5,  1.5708),
+]
 
-        # Подписки на /my_robot_N/goal_reached (Bool, публикует p2p-контроллер)
-        for name in ('my_robot_0', 'my_robot_1', 'my_robot_2'):
-            self.create_subscription(
-                Bool,
-                f'/{name}/goal_reached',
-                lambda msg, n=name: self._goal_cb(msg, n),
-                1
-            )
-
-    def _goal_cb(self, msg: Bool, robot_name: str):
-        if msg.data:
-            self.goal_reached[robot_name] = True
-
-    def send_goal(self, robot_name: str, x: float, y: float, yaw: float):
-        """Публикует цель и сбрасывает флаг достижения."""
-        self.goal_reached[robot_name] = False
-        goal = Pose2D(x=x, y=y, theta=yaw)
-        self.goal_pubs[robot_name].publish(goal)
-
-    def wait_for_goal(self, robot_name: str, timeout_sec: float = 30.0):
-        """Блокирует поток пока p2p не сообщит о достижении цели."""
-        import time
-        t0 = time.time()
-        while not self.goal_reached[robot_name]:
-            rclpy.spin_once(self, timeout_sec=0.05)
-            if time.time() - t0 > timeout_sec:
-                self.get_logger().warn(f'{robot_name}: goal timeout!')
-                break
-
-
-# ─────────────────────────────────────────────
-#  Точки маршрута для каждого робота
-#  (x, y, yaw) — координаты Webots-мира
-#  Скорректируйте под реальное расположение стен
-# ─────────────────────────────────────────────
-WAYPOINTS = {
-    'my_robot_0': {
-        'entry':  ( 1.0,  0.5, -1.5708),   # Въезд в коридор (стена wall 0)
-        'mid':    ( 1.0, -1.5, -1.5708),   # Преодоление коридора
-        'exit':   ( 1.0, -3.0, -1.5708),   # Выезд из коридора
-        'wait':   ( 2.0,  2.5,  1.5708),   # Точка ожидания (старт)
-    },
-    'my_robot_1': {
-        'entry':  ( 0.0,  0.5, -1.5708),
-        'mid':    ( 0.0, -1.5, -1.5708),
-        'exit':   ( 0.0, -3.0, -1.5708),
-        'wait':   ( 0.0,  2.5,  1.5708),
-    },
-    'my_robot_2': {
-        'entry':  (-2.0,  0.5, -1.5708),
-        'mid':    (-2.0, -1.5, -1.5708),
-        'exit':   (-2.0, -3.0, -1.5708),
-        'wait':   (-2.0,  2.5,  1.5708),
-    },
+OFFSETS = {
+    'my_robot_0':  1.0,
+    'my_robot_1': -1.0,
+    'my_robot_2': -3.0,
 }
 
+class RobotActionClient:
+    def __init__(self, node, robot_namespace):
+        self.node = node
+        self.client = ActionClient(node, MoveToPose, f'/{robot_namespace}/navigate_to_pose')
+        self.namespace = robot_namespace
 
-# ─────────────────────────────────────────────
-#  Состояния SMACH
-# ─────────────────────────────────────────────
+    def send_goal(self, x, y, yaw, timeout=30.0):
+        goal_msg = MoveToPose.Goal()
+        goal_msg.target.x = x
+        goal_msg.target.y = y
+        goal_msg.target.theta = yaw
+        self.node.get_logger().info(f"[{self.namespace}] Sending goal: ({x}, {y}, {yaw:.2f})")
 
-class WaitStart(smach.State):
-    """Начальное ожидание — аналог верхнего места сети Петри."""
-    def __init__(self, node, robot_name):
-        super().__init__(outcomes=['request_token'])
+        if not self.client.wait_for_server(timeout_sec=5.0):
+            self.node.get_logger().error(f"[{self.namespace}] Action server not available")
+            return False
+
+        future = self.client.send_goal_async(goal_msg)
+        done_event = threading.Event()
+        future.add_done_callback(lambda fut: done_event.set())
+        if not done_event.wait(timeout=timeout):
+            self.node.get_logger().error(f"[{self.namespace}] Goal timeout")
+            return False
+
+        goal_handle = future.result()
+        if not goal_handle.accepted:
+            self.node.get_logger().error(f"[{self.namespace}] Goal rejected")
+            return False
+
+        result_future = goal_handle.get_result_async()
+        done_event = threading.Event()
+        result_future.add_done_callback(lambda fut: done_event.set())
+        if not done_event.wait(timeout=timeout):
+            self.node.get_logger().error(f"[{self.namespace}] Result timeout")
+            return False
+
+        result = result_future.result().result
+        return result.success
+
+class MoveAlongRoute(smach.State):
+    def __init__(self, node, robot_name, route, semaphore_manager, action_client):
+        smach.State.__init__(self, outcomes=['succeeded', 'aborted', 'preempted'],
+                             input_keys=['route_index'],
+                             output_keys=['route_index'])
         self.node = node
         self.robot_name = robot_name
+        self.route = route
+        self.sem = semaphore_manager
+        self.client = action_client
+        self.acquired_semaphores = []
+
+    def _acquire_with_wait(self, sem_name):
+        self.node.get_logger().info(f"{self.robot_name} waiting for {sem_name}")
+        while not self.sem.acquire(sem_name, timeout=1.0):
+            time.sleep(0.1)   # не используем spin_once, просто спим
+        self.acquired_semaphores.append(sem_name)
+        self.node.get_logger().info(f"{self.robot_name} acquired {sem_name}")
+
+    def _release_if_held(self, sem_name):
+        if sem_name in self.acquired_semaphores:
+            self.sem.release(sem_name)
+            self.acquired_semaphores.remove(sem_name)
+            self.node.get_logger().info(f"{self.robot_name} released {sem_name}")
+
+    def _release_all(self):
+        for sem in list(self.acquired_semaphores):
+            self._release_if_held(sem)
 
     def execute(self, userdata):
-        self.node.get_logger().info(f'[{self.robot_name}] WaitStart')
-        rclpy.spin_once(self.node, timeout_sec=0.5)
-        return 'request_token'
+        idx = userdata.route_index
+        try:
+            while idx < len(self.route):
+                x, y, yaw = self.route[idx]
+                # Логика семафоров
+                if self.robot_name == 'my_robot_0':
+                    if idx == 2 and x == 1.0 and y == -2.5:
+                        self._acquire_with_wait('corridor_0')
+                    elif idx == 1 and x == 1.0 and y == 2.5:
+                        self._release_if_held('corridor_0')
+                elif self.robot_name == 'my_robot_1':
+                    if idx == 0 and x == -1.0 and y == 2.5:
+                        self._acquire_with_wait('corridor_0')
+                        self._release_if_held('corridor_2')
+                    elif idx == 3 and x == -1.0 and y == -2.5:
+                        self._acquire_with_wait('corridor_2')
+                        self._release_if_held('corridor_0')
+                elif self.robot_name == 'my_robot_2':
+                    if idx == 0 and x == -3.0 and y == 2.5:
+                        self._acquire_with_wait('corridor_2')
+                    elif idx == 3 and x == -3.0 and y == -2.5:
+                        self._release_if_held('corridor_2')
 
+                success = self.client.send_goal(x, y, yaw)
+                if not success:
+                    self._release_all()
+                    return 'aborted'
+                idx += 1
+                userdata.route_index = idx
+        except Exception as e:
+            self.node.get_logger().error(f"{self.robot_name} exception: {e}")
+            self._release_all()
+            return 'aborted'
 
-class AcquireToken(smach.State):
-    """Запрос фишки у семафора (блокирующий — реализует дугу «запрос фишки»)."""
-    def __init__(self, node, robot_name, semaphore):
-        super().__init__(outcomes=['acquired'])
-        self.node = node
-        self.robot_name = robot_name
-        self.sem = semaphore
+        self._release_all()
+        return 'succeeded'
 
-    def execute(self, userdata):
-        self.node.get_logger().info(
-            f'[{self.robot_name}] Waiting for token...')
-        self.sem.acquire()   # блокирует, пока фишка не свободна
-        self.node.get_logger().info(
-            f'[{self.robot_name}] Token acquired!')
-        return 'acquired'
-
-
-class EnterCorridor(smach.State):
-    """Въезд в коридор — p2p к точке entry."""
-    def __init__(self, node, robot_name):
-        super().__init__(outcomes=['done'])
-        self.node = node
-        self.robot_name = robot_name
-
-    def execute(self, userdata):
-        wp = WAYPOINTS[self.robot_name]['entry']
-        self.node.get_logger().info(
-            f'[{self.robot_name}] EnterCorridor → {wp}')
-        self.node.send_goal(self.robot_name, *wp)
-        self.node.wait_for_goal(self.robot_name)
-        return 'done'
-
-
-class TraverseCorridor(smach.State):
-    """Преодоление коридора — p2p к точке mid."""
-    def __init__(self, node, robot_name):
-        super().__init__(outcomes=['done'])
-        self.node = node
-        self.robot_name = robot_name
-
-    def execute(self, userdata):
-        wp = WAYPOINTS[self.robot_name]['mid']
-        self.node.get_logger().info(
-            f'[{self.robot_name}] TraverseCorridor → {wp}')
-        self.node.send_goal(self.robot_name, *wp)
-        self.node.wait_for_goal(self.robot_name)
-        return 'done'
-
-
-class ExitCorridor(smach.State):
-    """Выезд из коридора — p2p к точке exit."""
-    def __init__(self, node, robot_name):
-        super().__init__(outcomes=['done'])
-        self.node = node
-        self.robot_name = robot_name
-
-    def execute(self, userdata):
-        wp = WAYPOINTS[self.robot_name]['exit']
-        self.node.get_logger().info(
-            f'[{self.robot_name}] ExitCorridor → {wp}')
-        self.node.send_goal(self.robot_name, *wp)
-        self.node.wait_for_goal(self.robot_name)
-        return 'done'
-
-
-class ReleaseToken(smach.State):
-    """Возврат фишки семафору (дуга «возврат фишки» на схеме)."""
-    def __init__(self, node, robot_name, semaphore):
-        super().__init__(outcomes=['released'])
-        self.node = node
-        self.robot_name = robot_name
-        self.sem = semaphore
-
-    def execute(self, userdata):
-        # Возвращаем робота в точку ожидания
-        wp = WAYPOINTS[self.robot_name]['wait']
-        self.node.send_goal(self.robot_name, *wp)
-        self.node.wait_for_goal(self.robot_name)
-        self.sem.release()
-        self.node.get_logger().info(
-            f'[{self.robot_name}] Token released')
-        return 'released'
-
-
-class WaitIdle(smach.State):
-    """Ожидание перед следующим циклом (нижнее место сети Петри)."""
-    def __init__(self, node, robot_name):
-        super().__init__(outcomes=['restart'])
-        self.node = node
-        self.robot_name = robot_name
-
-    def execute(self, userdata):
-        self.node.get_logger().info(f'[{self.robot_name}] WaitIdle')
-        rclpy.spin_once(self.node, timeout_sec=1.0)
-        return 'restart'
-
-
-# ─────────────────────────────────────────────
-#  Сборка FSM для одного робота
-# ─────────────────────────────────────────────
-def build_robot_sm(node: MultiRobotSmach, robot_name: str) -> smach.StateMachine:
-    sem = node.robot_semaphores[robot_name]
-
-    # Внутренняя подмашина «коридор» (Въезд→Преодоление→Выезд)
-    corridor_sm = smach.StateMachine(outcomes=['corridor_done'])
-    with corridor_sm:
-        smach.StateMachine.add(
-            'ENTER', EnterCorridor(node, robot_name),
-            transitions={'done': 'TRAVERSE'})
-        smach.StateMachine.add(
-            'TRAVERSE', TraverseCorridor(node, robot_name),
-            transitions={'done': 'EXIT'})
-        smach.StateMachine.add(
-            'EXIT', ExitCorridor(node, robot_name),
-            transitions={'done': 'corridor_done'})
-
-    # Верхняя машина (цикличная)
-    sm = smach.StateMachine(outcomes=['loop_end'])
+def create_robot_sm(node, robot_name, sem_manager):
+    sm = smach.StateMachine(outcomes=['final'])
+    offset_x = OFFSETS[robot_name]
+    route = [(x + offset_x, y, yaw) for (x, y, yaw) in BASE_ROUTE]
+    client = RobotActionClient(node, robot_name)
     with sm:
-        smach.StateMachine.add(
-            'WAIT_START', WaitStart(node, robot_name),
-            transitions={'request_token': 'ACQUIRE_TOKEN'})
-        smach.StateMachine.add(
-            'ACQUIRE_TOKEN', AcquireToken(node, robot_name, sem),
-            transitions={'acquired': 'CORRIDOR'})
-        smach.StateMachine.add(
-            'CORRIDOR', corridor_sm,
-            transitions={'corridor_done': 'RELEASE_TOKEN'})
-        smach.StateMachine.add(
-            'RELEASE_TOKEN', ReleaseToken(node, robot_name, sem),
-            transitions={'released': 'WAIT_IDLE'})
-        smach.StateMachine.add(
-            'WAIT_IDLE', WaitIdle(node, robot_name),
-            transitions={'restart': 'WAIT_START'})   # ← цикл
+        sm.add('MOVE', MoveAlongRoute(node, robot_name, route, sem_manager, client),
+               transitions={'succeeded':'final', 'aborted':'final', 'preempted':'final'})
+    sm.userdata.route_index = 0
     return sm
 
+class MultiRobotManager(Node):
+    def __init__(self):
+        super().__init__('multi_robot_manager')
+        self.sem_manager = SemaphoreManager()
+        self.robots = ['my_robot_0', 'my_robot_1', 'my_robot_2']
+        self.smach_threads = []
+        for robot in self.robots:
+            sm = create_robot_sm(self, robot, self.sem_manager)
+            t = threading.Thread(target=self.run_sm, args=(sm, robot))
+            t.start()
+            self.smach_threads.append(t)
+        self.get_logger().info("MultiRobotManager started")
 
-# ─────────────────────────────────────────────
-#  Запуск трёх FSM в параллельных потоках
-# ─────────────────────────────────────────────
-def run_robot(node: MultiRobotSmach, robot_name: str):
-    sm = build_robot_sm(node, robot_name)
-    sm.execute()
-
+    def run_sm(self, sm, robot_name):
+        self.get_logger().info(f"Starting state machine for {robot_name}")
+        outcome = sm.execute()
+        self.get_logger().info(f"{robot_name} finished with outcome: {outcome}")
 
 def main(args=None):
     rclpy.init(args=args)
-    node = MultiRobotSmach()
-
-    threads = []
-    for name in ('my_robot_0', 'my_robot_1', 'my_robot_2'):
-        t = threading.Thread(target=run_robot, args=(node, name), daemon=True)
-        threads.append(t)
-        t.start()
-
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        node.destroy_node()
-        rclpy.shutdown()
-
+    node = MultiRobotManager()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

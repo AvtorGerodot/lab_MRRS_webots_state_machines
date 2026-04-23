@@ -18,6 +18,9 @@ def generate_launch_description():
     )
 
 
+    ROBOT_NAMES = ['my_robot_0', 'my_robot_1', 'my_robot_2']
+    ROBOT_NAMES_PARAM = ','.join(ROBOT_NAMES)
+
     def create_robot(webots_robot_name_and_namespace):
         robot_driver = WebotsController(
             robot_name = webots_robot_name_and_namespace,
@@ -47,18 +50,31 @@ def generate_launch_description():
             }],
         )
 
-        return [robot_driver, control_motor, state_publisher]
+        point_to_point_controller = Node(
+            package='my_youbot',
+            namespace=webots_robot_name_and_namespace,
+            executable='point_to_point_controller',
+            parameters=[{'use_sim_time': True}],
+        )
+
+        return [robot_driver, control_motor, state_publisher, point_to_point_controller]
 
 
 
-    smach = Node(
+    multi_robot_smach = Node(
         package='my_youbot',
-        executable='smach',
-        output='log',
-        parameters=[{
-                    'use_sim_time' : True,
-        }]
+        executable='multi_robot_smach',
+        parameters=[{'use_sim_time': True}],
     )
+
+    # smach = Node(
+    #     package='my_youbot',
+    #     executable='smach',
+    #     output='log',
+    #     parameters=[{
+    #                 'use_sim_time' : True,
+    #     }]
+    # )
 
     # camera_node= Node(
     #     package='my_youbot',
@@ -77,11 +93,13 @@ def generate_launch_description():
         webots,
         webots._supervisor,
 
+        # *[create_robot(robot_name) for robot_name in ROBOT_NAMES],
         *create_robot("my_robot_0"),    # распаковка списка
         *create_robot("my_robot_1"),
         *create_robot("my_robot_2"),
         
-        smach,
+        multi_robot_smach,
+        # smach,
         # camera_node,
         # get_xyz,
         launch.actions.RegisterEventHandler(

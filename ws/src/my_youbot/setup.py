@@ -1,5 +1,9 @@
 from setuptools import find_packages, setup
-import glob
+from glob import glob
+
+# import os
+# from ament_index_python.packages import get_package_share_directory
+
 
 package_name = 'my_youbot'
 data_files = []
@@ -7,10 +11,12 @@ data_files.append(('share/ament_index/resource_index/packages', ['resource/' + p
 data_files.append(('share/' + package_name + '/launch', ['launch/robot_launch.py']))
 data_files.append(('share/' + package_name + '/launch', ['launch/robot_launch1.py']))
 
-data_files.append(('share/' + package_name + '/worlds', glob.glob('worlds/*.wbt')))
+data_files.append(('share/' + package_name + '/worlds', glob('worlds/*.wbt')))
 
 # data_files.append(('share/' + package_name + '/resource', ['resource/my_robot.urdf']))e
-data_files.append(('share/' + package_name + '/resource', glob.glob('resource/*.urdf')))
+data_files.append(('share/' + package_name + '/resource', glob('resource/*.urdf')))
+
+# data_files.append(('share/' + package_name + '/action', glob('action/*.action')))
 
 data_files.append(('share/' + package_name, ['package.xml']))
 data_files.append(('share/' + package_name + '/models', ['models/best3.pt']))
@@ -30,10 +36,11 @@ setup(
         'console_scripts': [
             'my_robot_driver = my_youbot.my_robot_driver:main',
             'control_motor = my_youbot.control_motor:main',
-            'smach = my_youbot.smach:main',
+            # 'smach = my_youbot.smach:main',
             'camera_node= my_youbot.camera_node:main',
             'robot_state_publisher = my_youbot.robot_state_publisher:main',
             'point_to_point_controller = my_youbot.point_to_point_controller:main',
+            'multi_robot_smach         = my_youbot.multi_robot_smach:main',
             # 'get_xyz= my_youbot.get_xyz:main',
         ],
     },
