@@ -20,6 +20,13 @@ def generate_launch_description():
 
     ROBOT_NAMES = ['my_robot_0', 'my_robot_1', 'my_robot_2']
     ROBOT_NAMES_PARAM = ','.join(ROBOT_NAMES)
+    
+    # linear_speed, angular_speed
+    robot_velocities = {
+        'my_robot_0': [0.3, 0.8],
+        'my_robot_1': [0.2, 0.6],
+        'my_robot_2': [0.4, 1.0],
+    }
 
     def create_robot(webots_robot_name_and_namespace):
         robot_driver = WebotsController(
@@ -50,11 +57,14 @@ def generate_launch_description():
             }],
         )
 
-        point_to_point_controller = Node(
+        point_to_point_controller = Node( 
             package='my_youbot',
             namespace=webots_robot_name_and_namespace,
             executable='point_to_point_controller',
-            parameters=[{'use_sim_time': True}],
+            parameters=[{
+                'use_sim_time': True,
+                'robot_velocities': robot_velocities[webots_robot_name_and_namespace],
+                }],
         )
 
         return [robot_driver, control_motor, state_publisher, point_to_point_controller]
@@ -64,7 +74,10 @@ def generate_launch_description():
     multi_robot_smach = Node(
         package='my_youbot',
         executable='multi_robot_smach',
-        parameters=[{'use_sim_time': True}],
+        parameters=[{
+            'use_sim_time': True,
+            'robot_names': ROBOT_NAMES,
+            }],
     )
 
     # smach = Node(

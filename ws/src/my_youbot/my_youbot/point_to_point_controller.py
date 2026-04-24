@@ -10,12 +10,16 @@ from rclpy.executors import MultiThreadedExecutor
 from my_youbot_interfaces.action import MoveToPose
 
 class PointToPointController(Node):
-    def __init__(self, linear_speed=0.3, angular_speed=0.8, angle_gain=0.5):
+    def __init__(self):     #, linear_speed=0.3, angular_speed=0.8, angle_gain=0.5
         super().__init__('point_to_point_controller')
         
-        self.linear_speed = linear_speed
-        self.angular_speed = angular_speed
-        self.angle_gain = angle_gain
+        self.declare_parameter('robot_velocities', [0.3, 0.8])
+        robot_velocities = self.get_parameter('robot_velocities').value
+        
+        self.linear_speed = robot_velocities[0]
+        self.angular_speed = robot_velocities[1]
+        # self.angle_gain = angle_gain
+        self.angle_gain = 0.5
         self.distance_tolerance = 0.1
         self.angle_tolerance = 0.05
         

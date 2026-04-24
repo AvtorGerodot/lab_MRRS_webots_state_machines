@@ -3,6 +3,7 @@ geometry_msgs/Pose2D target
 ---
 # Result
 bool success
+geometry_msgs/Pose2D final_pose
 ---
 # Feedback
 geometry_msgs/Pose2D current_pose
