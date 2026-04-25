@@ -44,11 +44,11 @@ class Robot_ActionClient:
         self._goal_handle = None
 
 
-    def send_goal(self, x, y, yaw, timeout=5.0):
+    def send_goal(self, target_point, timeout=5.0):
         goal_msg = MoveToPose.Goal()
-        goal_msg.target.x = x
-        goal_msg.target.y = y
-        goal_msg.target.theta = yaw
+        goal_msg.target.x = target_point[0]     # x 
+        goal_msg.target.y = target_point[1]     # y
+        goal_msg.target.theta = target_point[2] # yaw
         self.node.get_logger().info(f"[{self.robot_name}] Sending goal: ({x}, {y}, {yaw:.2f})")
 
         if not self._action_client.wait_for_server(timeout_sec=timeout):
@@ -119,64 +119,122 @@ class MultiRobotManager(Node):
         
         sm = smach.StateMachine(outcomes=['loop_done', 'END'])
         with sm:
-            smach.StateMachine.add(f'{robot_name}_waiting', waiting(client, route_index = 0),
-                                   transitions={f'{robot_name}_go_to_left'  : f'{robot_name}_go_into_left_corridor',
-                                                f'{robot_name}_WAIT'        : f'{robot_name}_waiting'
+            smach.StateMachine.add(f'{robot_name}_waiting_bottom',          waiting(client, route_index = 0),   # 0 - левый коридор
+                                   transitions={'GO_TO'             :       f'{robot_name}_go_into_left_corridor',
+                                                'WAIT'              :       f'{robot_name}_waiting_bottom'
+                                    })
+
+            smach.StateMachine.add(f'{robot_name}_go_into_left_corridor',   go_into_corridor(client, route[1]),
+                                   transitions={'GO_THROUGH'        :       f'{robot_name}_go_through_left_corridor',
+                                    })
+            
+            smach.StateMachine.add(f'{robot_name}_go_through_left_corridor',go_into_corridor(client, route[2]),
+                                   transitions={'GO_OUT'            :       f'{robot_name}_go_out_left_corridor',
+                                    })
+            
+            smach.StateMachine.add(f'{robot_name}_go_out_left_corridor',    go_into_corridor(client, route[3]),
+                                   transitions={'WAIT'              :       f'{robot_name}_waiting_top',
+                                    })
+
+            # ---------------------------------
+
+            smach.StateMachine.add(f'{robot_name}_waiting_top',             waiting(client, route_index = 1),   # 1 - правый коридор
+                                   transitions={'GO_TO'             :       f'{robot_name}_go_into_right_corridor',
+                                                'WAIT'              :       f'{robot_name}_waiting_top'
+                                    })
+
+            smach.StateMachine.add(f'{robot_name}_go_into_right_corridor',   go_into_corridor(client, route[4]),
+                                   transitions={'GO_THROUGH'        :       f'{robot_name}_go_through_right_corridor',
+                                    })
+            
+            smach.StateMachine.add(f'{robot_name}_go_through_right_corridor',go_into_corridor(client, route[5]),
+                                   transitions={'GO_OUT'            :       f'{robot_name}_go_out_right_corridor',
+                                    })
+            
+            smach.StateMachine.add(f'{robot_name}_go_out_right_corridor',   go_into_corridor(client, route[0]),
+                                   transitions={'WAIT'              :       f'{robot_name}_waiting_bottom',
                                     })
 
         return sm
 
 
 
-
-
-
 class go_into_corridor(smach.State):
     def __init__(self, robot_client, target_point):
-        super().__init__(outcomes=[])
+        super().__init__(outcomes=['GO_THROUGH'])
+        self.client = robot_client
+        self.target_point = target_point
+
+    def execute(self, ud):
+        self.client.send_goal()
+        return 'GO_THROUGH'
+
+
 
 
 class go_through_corridor(smach.State):
     def __init__(self, robot_client, target_point):
-        super().__init__(self, outcomes=[])
+        super().__init__(self, outcomes=['GO_OUT'])
+        self.client = robot_client
+        self.target_point = target_point
+
+    def execute(self, ud):
         
+        return 'GO_OUT'
+        
+
 
 class go_out_of_corridor(smach.State):
     def __init__(self, robot_client, target_point):
-        smach.State.__init__(self, outcomes=[])
+        smach.State.__init__(self, outcomes=['WAIT'])
+        self.client = robot_client
+        self.target_point = target_point
+
+    def execute(self, ud):
         
+        return 'WAIT'
+
+
 
 class waiting(smach.State):
     def __init__(self, userdata, robot_client, route_index):  # route_index: 0 - левый коридор, 1 - правый коридор
-        super().__init__(self, outcomes=[self.generate_way_string(route_index), f'{robot_client.robot_name}_WAIT' ])
+        super().__init__(self, outcomes=['GO_TO', 'WAIT'])
         self.client = robot_client
         self.route_index = route_index
-
-    def generate_way_string(self, route_index):
-        way_string = f'{self.client.robot_name}'
-        if not route_index:
-            way_string += '_go_to_left' 
-        else:
-            way_string += '_go_to_right'
-        return way_string
 
     def execute(self, userdata):
         corridor_index = ROBOT_FLAGS[self.client.robot_name][self.route_index]  # находим индекс проверяемого корридора
         if corridor_index == -1:
             if avaliable_corridor[corridor_index]:
                 avaliable_corridor[corridor_index] = 0
-                return self.generate_way_string(self.route_index)
-        return f'{self.client.robot_name}_WAIT'
+                return 'GO_TO'
+        time.sleep(5)
+        return 'WAIT'
 
-        
+# class waiting(smach.State):
+#     def __init__(self, userdata, robot_client, route_index):  # route_index: 0 - левый коридор, 1 - правый коридор
+#         super().__init__(self, outcomes=[self.generate_way_string(route_index), f'{robot_client.robot_name}_WAIT' ])
+#         self.client = robot_client
+#         self.route_index = route_index
+
+#     def generate_way_string(self, route_index):
+#         way_string = f'{self.client.robot_name}'
+#         if not route_index:
+#             way_string += '_go_to_left' 
+#         else:
+#             way_string += '_go_to_right'
+#         return way_string
+
+#     def execute(self, userdata):
+#         corridor_index = ROBOT_FLAGS[self.client.robot_name][self.route_index]  # находим индекс проверяемого корридора
+#         if corridor_index == -1:
+#             if avaliable_corridor[corridor_index]:
+#                 avaliable_corridor[corridor_index] = 0
+#                 return self.generate_way_string(self.route_index)
+#         time.sleep(5)
+#         return f'{self.client.robot_name}_WAIT'
 
             
-
-
-
-
-
-        
 
 
 
