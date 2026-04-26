@@ -40,7 +40,8 @@ setup(
             'camera_node= my_youbot.camera_node:main',
             'robot_state_publisher = my_youbot.robot_state_publisher:main',
             'point_to_point_controller = my_youbot.point_to_point_controller:main',
-            'multi_robot_smach         = my_youbot.multi_robot_smach:main',
+            # 'multi_robot_smach         = my_youbot.multi_robot_smach:main',
+            'multi_robot_smach = my_youbot.temp_multi_robot_smach:main'
             # 'get_xyz= my_youbot.get_xyz:main',
         ],
     },

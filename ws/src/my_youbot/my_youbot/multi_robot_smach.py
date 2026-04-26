@@ -38,7 +38,7 @@ OFFSETS = {
 
 class Robot_ActionClient:
     def __init__(self, node, robot_name):
-        # self.node = node
+        self.node = node
         self._action_client = ActionClient(node, MoveToPose, f'/{robot_name}/navigate_to_pose')
         self.robot_name = robot_name
         self._goal_handle = None
@@ -49,7 +49,7 @@ class Robot_ActionClient:
         goal_msg.target.x = target_point[0]     # x 
         goal_msg.target.y = target_point[1]     # y
         goal_msg.target.theta = target_point[2] # yaw
-        self.node.get_logger().info(f"[{self.robot_name}] Sending goal: ({x}, {y}, {yaw:.2f})")
+        self.node.get_logger().info(f"[{self.robot_name}] Sending goal: ({goal_msg.target.x}, {goal_msg.target.y}, {goal_msg.target.theta:.2f})")
 
         if not self._action_client.wait_for_server(timeout_sec=timeout):
             self.node.get_logger().error(f"[{self.namespace}] Action server not available")
@@ -119,86 +119,95 @@ class MultiRobotManager(Node):
         
         sm = smach.StateMachine(outcomes=['loop_done', 'END'])
         with sm:
+            # smach.StateMachine.add(f'{robot_name}_waiting_bottom',          waiting(client, route_index = 0),   # 0 - левый коридор
+            #                        transitions={'GO_TO'             :       f'{robot_name}_go_into_left_corridor',
+            #                                     'WAIT'              :       f'{robot_name}_waiting_bottom'
+            #                         })
+
+            # smach.StateMachine.add(f'{robot_name}_go_into_left_corridor',   go_into_corridor(client, route[1]),
+            #                        transitions={'GO_THROUGH'        :       f'{robot_name}_go_through_left_corridor',
+            #                         })
+            
+            # smach.StateMachine.add(f'{robot_name}_go_through_left_corridor',go_into_corridor(client, route[2]),
+            #                        transitions={'GO_OUT'            :       f'{robot_name}_go_out_left_corridor',
+            #                         })
+            
+            # smach.StateMachine.add(f'{robot_name}_go_out_left_corridor',    go_into_corridor(client, route[3]),
+            #                        transitions={'WAIT'              :       f'{robot_name}_waiting_top',
+            #                         })
+
+            # # ---------------------------------
+
+            # smach.StateMachine.add(f'{robot_name}_waiting_top',             waiting(client, route_index = 1),   # 1 - правый коридор
+            #                        transitions={'GO_TO'             :       f'{robot_name}_go_into_right_corridor',
+            #                                     'WAIT'              :       f'{robot_name}_waiting_top'
+            #                         })
+
+            # smach.StateMachine.add(f'{robot_name}_go_into_right_corridor',   go_into_corridor(client, route[4]),
+            #                        transitions={'GO_THROUGH'        :       f'{robot_name}_go_through_right_corridor',
+            #                         })
+            
+            # smach.StateMachine.add(f'{robot_name}_go_through_right_corridor',go_into_corridor(client, route[5]),
+            #                        transitions={'GO_OUT'            :       f'{robot_name}_go_out_right_corridor',
+            #                         })
+            
+            # smach.StateMachine.add(f'{robot_name}_go_out_right_corridor',   go_into_corridor(client, route[0]),
+            #                        transitions={'WAIT'              :       f'{robot_name}_waiting_bottom',
+            #                         })
+
             smach.StateMachine.add(f'{robot_name}_waiting_bottom',          waiting(client, route_index = 0),   # 0 - левый коридор
-                                   transitions={'GO_TO'             :       f'{robot_name}_go_into_left_corridor',
+                                   transitions={'NEXT'              :       f'{robot_name}_go_into_left_corridor',
                                                 'WAIT'              :       f'{robot_name}_waiting_bottom'
                                     })
 
-            smach.StateMachine.add(f'{robot_name}_go_into_left_corridor',   go_into_corridor(client, route[1]),
-                                   transitions={'GO_THROUGH'        :       f'{robot_name}_go_through_left_corridor',
+            smach.StateMachine.add(f'{robot_name}_go_into_left_corridor',   go_to_point(client, route[1]),
+                                   transitions={'NEXT'              :             f'{robot_name}_go_through_left_corridor',
                                     })
             
-            smach.StateMachine.add(f'{robot_name}_go_through_left_corridor',go_into_corridor(client, route[2]),
-                                   transitions={'GO_OUT'            :       f'{robot_name}_go_out_left_corridor',
+            smach.StateMachine.add(f'{robot_name}_go_through_left_corridor',go_to_point(client, route[2]),
+                                   transitions={'NEXT'              :       f'{robot_name}_go_out_left_corridor',
                                     })
             
-            smach.StateMachine.add(f'{robot_name}_go_out_left_corridor',    go_into_corridor(client, route[3]),
-                                   transitions={'WAIT'              :       f'{robot_name}_waiting_top',
+            smach.StateMachine.add(f'{robot_name}_go_out_left_corridor',    go_to_point(client, route[3]),
+                                   transitions={'NEXT'              :       f'{robot_name}_waiting_top',
                                     })
 
             # ---------------------------------
 
             smach.StateMachine.add(f'{robot_name}_waiting_top',             waiting(client, route_index = 1),   # 1 - правый коридор
-                                   transitions={'GO_TO'             :       f'{robot_name}_go_into_right_corridor',
+                                   transitions={'NEXT'              :       f'{robot_name}_go_into_right_corridor',
                                                 'WAIT'              :       f'{robot_name}_waiting_top'
                                     })
 
-            smach.StateMachine.add(f'{robot_name}_go_into_right_corridor',   go_into_corridor(client, route[4]),
-                                   transitions={'GO_THROUGH'        :       f'{robot_name}_go_through_right_corridor',
+            smach.StateMachine.add(f'{robot_name}_go_into_right_corridor',   go_to_point(client, route[4]),
+                                   transitions={'NEXT'              :       f'{robot_name}_go_through_right_corridor',
                                     })
             
-            smach.StateMachine.add(f'{robot_name}_go_through_right_corridor',go_into_corridor(client, route[5]),
-                                   transitions={'GO_OUT'            :       f'{robot_name}_go_out_right_corridor',
+            smach.StateMachine.add(f'{robot_name}_go_through_right_corridor',go_to_point(client, route[5]),
+                                   transitions={'NEXT'              :       f'{robot_name}_go_out_right_corridor',
                                     })
             
-            smach.StateMachine.add(f'{robot_name}_go_out_right_corridor',   go_into_corridor(client, route[0]),
-                                   transitions={'WAIT'              :       f'{robot_name}_waiting_bottom',
-                                    })
+            smach.StateMachine.add(f'{robot_name}_go_out_right_corridor',   go_to_point(client, route[0]),
+                                   transitions={'NEXT'              :       f'{robot_name}_waiting_bottom',
+                                   })
 
         return sm
 
 
 
-class go_into_corridor(smach.State):
+class go_to_point(smach.State):
     def __init__(self, robot_client, target_point):
-        super().__init__(outcomes=['GO_THROUGH'])
+        super().__init__(outcomes=['NEXT'])
         self.client = robot_client
         self.target_point = target_point
 
     def execute(self, ud):
-        self.client.send_goal()
-        return 'GO_THROUGH'
-
-
-
-
-class go_through_corridor(smach.State):
-    def __init__(self, robot_client, target_point):
-        super().__init__(self, outcomes=['GO_OUT'])
-        self.client = robot_client
-        self.target_point = target_point
-
-    def execute(self, ud):
-        
-        return 'GO_OUT'
-        
-
-
-class go_out_of_corridor(smach.State):
-    def __init__(self, robot_client, target_point):
-        smach.State.__init__(self, outcomes=['WAIT'])
-        self.client = robot_client
-        self.target_point = target_point
-
-    def execute(self, ud):
-        
-        return 'WAIT'
-
-
+        self.client.send_goal(self.target_point)
+        return 'NEXT'
 
 class waiting(smach.State):
     def __init__(self, userdata, robot_client, route_index):  # route_index: 0 - левый коридор, 1 - правый коридор
-        super().__init__(self, outcomes=['GO_TO', 'WAIT'])
+        super().__init__(self, outcomes=['NEXT', 'WAIT'])
         self.client = robot_client
         self.route_index = route_index
 
@@ -207,9 +216,62 @@ class waiting(smach.State):
         if corridor_index == -1:
             if avaliable_corridor[corridor_index]:
                 avaliable_corridor[corridor_index] = 0
-                return 'GO_TO'
+                return 'NEXT'
         time.sleep(5)
         return 'WAIT'
+
+
+# class go_into_corridor(smach.State):
+#     def __init__(self, robot_client, target_point):
+#         super().__init__(outcomes=['GO_THROUGH'])
+#         self.client = robot_client
+#         self.target_point = target_point
+
+#     def execute(self, ud):
+#         self.client.send_goal(self.target_point)
+#         return 'GO_THROUGH'
+
+
+
+
+# class go_through_corridor(smach.State):
+#     def __init__(self, robot_client, target_point):
+#         super().__init__(self, outcomes=['GO_OUT'])
+#         self.client = robot_client
+#         self.target_point = target_point
+
+#     def execute(self, ud):
+        
+#         return 'GO_OUT'
+        
+
+
+# class go_out_of_corridor(smach.State):
+#     def __init__(self, robot_client, target_point):
+#         smach.State.__init__(self, outcomes=['WAIT'])
+#         self.client = robot_client
+#         self.target_point = target_point
+
+#     def execute(self, ud):
+        
+#         return 'WAIT'
+
+
+
+# class waiting(smach.State):
+#     def __init__(self, userdata, robot_client, route_index):  # route_index: 0 - левый коридор, 1 - правый коридор
+#         super().__init__(self, outcomes=['GO_TO', 'WAIT'])
+#         self.client = robot_client
+#         self.route_index = route_index
+
+#     def execute(self, userdata):
+#         corridor_index = ROBOT_FLAGS[self.client.robot_name][self.route_index]  # находим индекс проверяемого корридора
+#         if corridor_index == -1:
+#             if avaliable_corridor[corridor_index]:
+#                 avaliable_corridor[corridor_index] = 0
+#                 return 'GO_TO'
+#         time.sleep(5)
+#         return 'WAIT'
 
 # class waiting(smach.State):
 #     def __init__(self, userdata, robot_client, route_index):  # route_index: 0 - левый коридор, 1 - правый коридор
